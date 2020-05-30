@@ -1,14 +1,23 @@
 package com.dotquestionmark.developerstreak;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -24,7 +33,12 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback{
     SurfaceView mSurfaceView;
     SurfaceHolder mSurfaceHolder;
 
+    Camera.PictureCallback mPictureCallback;
+
+    private Button captureButton;
+
     final int CAMERA_CODE=1;
+    byte[] a;
 
     public static CameraFragment newInstance(){
         CameraFragment fragment=new CameraFragment();
@@ -40,6 +54,8 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback{
         mSurfaceView=view.findViewById(R.id.surfaceView);
         mSurfaceHolder=mSurfaceView.getHolder();
 
+
+
         if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED)
         {
                ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CAMERA}, CAMERA_CODE);
@@ -50,10 +66,50 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback{
             mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         }
 
+        captureButton=(Button) view.findViewById(R.id.capturebuttonid);
+
+
+
+        captureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                imageCapture();
+            }
+        });
+
+        mPictureCallback=new Camera.PictureCallback() {
+            @Override
+            public void onPictureTaken(byte[] data, Camera camera) {
+                ;
+
+//                if(data!=null)
+//                {
+//
+//                    Bitmap bitmap= BitmapFactory.decodeByteArray(data, 0, data.length);
+//                    mImageView.setImageBitmap(bitmap);
+//
+//                }
+
+                 a=data;
+
+//                Intent intent=new Intent(getActivity(), ImagePreviewActivity.class);
+//                intent.putExtra("abcd", a);
+//                startActivity(intent);
+
+
+                return;
+            }
+        };
 
 
 
         return view;
+    }
+
+    void imageCapture()
+    {
+        mCamera.takePicture(null, null, mPictureCallback);
     }
 
     @Override
