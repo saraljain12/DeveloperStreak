@@ -18,9 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -122,6 +124,22 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback{
 
         parameters.setPreviewFrameRate(30);
         parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+
+        Camera.Size bestSize=null;
+
+        List<Camera.Size> sizeList=mCamera.getParameters().getSupportedPictureSizes();
+        bestSize=sizeList.get(0);
+
+        for(int i=1; i<sizeList.size(); i++)
+        {
+            if((sizeList.get(i).width*sizeList.get(i).height)>(bestSize.width*bestSize.height))
+            {
+                bestSize=sizeList.get(i);
+            }
+        }
+        parameters.setPictureSize(bestSize.width, bestSize.height);
+
+
 
         mCamera.setParameters(parameters);
 
