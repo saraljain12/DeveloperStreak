@@ -38,7 +38,8 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback{
     private Button captureButton;
 
     final int CAMERA_CODE=1;
-    byte[] a;
+
+    public static byte[] a;
 
     public static CameraFragment newInstance(){
         CameraFragment fragment=new CameraFragment();
@@ -93,9 +94,9 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback{
 
                  a=data;
 
-//                Intent intent=new Intent(getActivity(), ImagePreviewActivity.class);
+                Intent intent=new Intent(getActivity(), ImagePreviewActivity.class);
 //                intent.putExtra("abcd", a);
-//                startActivity(intent);
+                startActivity(intent);
 
 
                 return;
